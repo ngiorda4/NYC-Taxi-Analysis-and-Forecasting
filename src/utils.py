@@ -63,8 +63,6 @@ def load_data_from_google_drive(url):
     df = pd.read_csv(url_processed)
     return df
 
-#########################Added by us###############
-
 
 def calculate_average_neo_size(data):
     # To create a dictionary to store the average size of NEOs for each day
@@ -88,4 +86,3 @@ def calculate_average_neo_size(data):
         average_sizes[date] = average_size
 
     return average_sizes
-
