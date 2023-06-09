@@ -2,6 +2,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 
 def create_scatterplot(df, x_col, y_col, title, xlabel, ylabel):
@@ -61,3 +62,30 @@ def load_data_from_google_drive(url):
     url_processed='https://drive.google.com/uc?id=' + url.split('/')[-2]
     df = pd.read_csv(url_processed)
     return df
+
+#########################Added by us###############
+
+
+def calculate_average_neo_size(data):
+    # To create a dictionary to store the average size of NEOs for each day
+    average_sizes = {}
+
+    # Iterate over each day in the data
+    for date, neos in data.items():
+        neo_sizes = []
+
+        # Iterate over each NEO for the current day and calculate its size
+        for neo in neos:
+            # Take the average of the estimated diameter min and max values for each NEO
+            neo_size = (neo['estimated_diameter']['meters']['estimated_diameter_min'] + 
+                        neo['estimated_diameter']['meters']['estimated_diameter_max']) / 2.0
+            neo_sizes.append(neo_size)
+
+        # Calculate the average size for the current day
+        average_size = sum(neo_sizes) / len(neo_sizes)
+
+        # Store the average size for the current day in the dictionary
+        average_sizes[date] = average_size
+
+    return average_sizes
+
