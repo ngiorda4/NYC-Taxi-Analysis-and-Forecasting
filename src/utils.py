@@ -61,3 +61,4 @@ def load_data_from_google_drive(url):
     url_processed='https://drive.google.com/uc?id=' + url.split('/')[-2]
     df = pd.read_csv(url_processed)
     return df
+
