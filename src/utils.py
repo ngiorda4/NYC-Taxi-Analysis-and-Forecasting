@@ -86,3 +86,39 @@ def calculate_average_neo_size(data):
         average_sizes[date] = average_size
 
     return average_sizes
+
+
+def analyze_neo_data(data):
+    neo_sizes = []
+    is_hazardous = []
+
+    for item in data:
+        for date, neos in item['near_earth_objects'].items():
+            for neo in neos:
+                size = neo['estimated_diameter']['meters']['estimated_diameter_max']
+                is_potentially_hazardous = neo['is_potentially_hazardous_asteroid']
+
+                neo_sizes.append(float(size))
+                is_hazardous.append(is_potentially_hazardous)
+
+    mean_size = statistics.mean(neo_sizes)
+    median_size = statistics.median(neo_sizes)
+    mode_size = statistics.mode(neo_sizes)
+    std_dev = statistics.stdev(neo_sizes)
+
+    hazardous_neo_sizes = [size for size, hazardous in zip(neo_sizes, is_hazardous) if hazardous]
+    non_hazardous_neo_sizes = [size for size, hazardous in zip(neo_sizes, is_hazardous) if not hazardous]
+
+    correlation = np.corrcoef(neo_sizes, is_hazardous)[0, 1]
+
+    analysis_result = {
+        'mean_size': mean_size,
+        'median_size': median_size,
+        'mode_size': mode_size,
+        'std_dev': std_dev,
+        'correlation': correlation,
+        'hazardous_neo_sizes': hazardous_neo_sizes,
+        'non_hazardous_neo_sizes': non_hazardous_neo_sizes
+    }
+
+    return analysis_result
