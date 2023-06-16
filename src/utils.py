@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
-
+import statistics
 
 def create_scatterplot(df, x_col, y_col, title, xlabel, ylabel):
     """
@@ -122,3 +122,5 @@ def analyze_neo_data(data):
     }
 
     return analysis_result
+
+
