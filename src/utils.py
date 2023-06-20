@@ -134,4 +134,16 @@ def analyze_neo_data(data):
     # Return the analysis results
     return analysis_result
 
+def display_hazardous_proportion(df, cutoff_size, show_pie_chart):
+    filtered_df = df[df['estimated_diameter.meters.estimated_diameter_avg'] > cutoff_size]
 
+    filtered_non_hazardous_count = len(filtered_df[filtered_df['is_potentially_hazardous_asteroid']==False])
+    filtered_hazardous_count = len(filtered_df[filtered_df['is_potentially_hazardous_asteroid']==True])
+    # print("filtered_hazardous_count", filtered_hazardous_count)
+    # print("filtered_non_hazardous_count", filtered_non_hazardous_count)
+
+    filtered_hazardous_percentage = filtered_hazardous_count/(filtered_hazardous_count+filtered_non_hazardous_count)
+    filtered_hazardous_df = pd.DataFrame({'count': [filtered_hazardous_count, filtered_non_hazardous_count]}, index=['hazardous', 'non-hazardous'])
+    if show_pie_chart == True:
+        filtered_hazardous_plot = filtered_hazardous_df.plot.pie(y='count', ylabel='', figsize=(5,5), autopct='%1.1f%%', title="Proportion of filtered hazardous vs non-hazardous NEOs")
+    return [cutoff_size, filtered_hazardous_percentage]
