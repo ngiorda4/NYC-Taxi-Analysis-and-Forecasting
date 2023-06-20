@@ -89,28 +89,38 @@ def calculate_average_neo_size(data):
 
 
 def analyze_neo_data(data):
+    # Initialize empty lists to store NEO sizes and hazard indicators
     neo_sizes = []
     is_hazardous = []
 
+    # Iterate over the data
     for item in data:
+        # Access the 'near_earth_objects' key and its values (dates and NEOs)
         for date, neos in item['near_earth_objects'].items():
+            # Iterate over the NEOs for a specific date
             for neo in neos:
+                # Extract the NEO size and hazard indicator
                 size = neo['estimated_diameter']['meters']['estimated_diameter_max']
                 is_potentially_hazardous = neo['is_potentially_hazardous_asteroid']
 
+                # Append the NEO size and hazard indicator to the respective lists
                 neo_sizes.append(float(size))
                 is_hazardous.append(is_potentially_hazardous)
 
+    # Compute statistical measures using the collected NEO sizes
     mean_size = statistics.mean(neo_sizes)
     median_size = statistics.median(neo_sizes)
     mode_size = statistics.mode(neo_sizes)
     std_dev = statistics.stdev(neo_sizes)
 
+    # Create subsets of NEO sizes based on hazard indicators
     hazardous_neo_sizes = [size for size, hazardous in zip(neo_sizes, is_hazardous) if hazardous]
     non_hazardous_neo_sizes = [size for size, hazardous in zip(neo_sizes, is_hazardous) if not hazardous]
 
+    # Calculate the correlation between NEO sizes and hazard indicators
     correlation = np.corrcoef(neo_sizes, is_hazardous)[0, 1]
 
+    # Create a dictionary containing the analysis results
     analysis_result = {
         'mean_size': mean_size,
         'median_size': median_size,
@@ -121,6 +131,7 @@ def analyze_neo_data(data):
         'non_hazardous_neo_sizes': non_hazardous_neo_sizes
     }
 
+    # Return the analysis results
     return analysis_result
 
 
